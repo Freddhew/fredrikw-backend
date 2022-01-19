@@ -1,0 +1,28 @@
+{
+  "name": "jensen-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Fredrik Wisborg",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "friendly-challenge": "^0.9.0",
+    "healthcheck": "^0.1.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose-findorcreate": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Freddhew/pa01-backend"
+  },
+  "engines": {
+    "node": "17.x"
+  }
+}
