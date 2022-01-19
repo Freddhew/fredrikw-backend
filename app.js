@@ -4,8 +4,8 @@ const express = require("express")
 const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken');
 const path = require('path')
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const findOrCreate = require("mongoose-findorcreate")
+// const GoogleStrategy = require('passport-google-oauth20').Strategy;
+// const findOrCreate = require("mongoose-findorcreate")
 
 const app = express()
 process.env.PORT = 5500
