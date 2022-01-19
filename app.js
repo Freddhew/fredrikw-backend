@@ -48,7 +48,7 @@ app.post('/authorize', ( req, res ) => {
          expiresIn: 60 * 60 
       }); 
 
-      console.log(token)
+      console.log("Your token: " + token)
       res.status(200).send(token)
 
       app.get('/', function( req, res ) { //Eget försök för att ge access till ny sida efter login 
