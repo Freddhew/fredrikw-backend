@@ -4,8 +4,9 @@ const express = require("express")
 const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken');
 const path = require('path')
-// const GoogleStrategy = require('passport-google-oauth20').Strategy;
-// const findOrCreate = require("mongoose-findorcreate")
+const https = require('https')
+const fs = require('fs')
+
 
 const app = express()
 process.env.PORT = 5500
@@ -16,6 +17,7 @@ let body
 
 app.use(function (req, res, next) {
    res.setHeader( 'Content-Security-Policy', "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'");
+   res.send('This is a SSL Server')
    next();
 });
 
@@ -62,6 +64,9 @@ app.post('/authorize', ( req, res ) => {
    }
 });
 
-app.listen(PORT , ()=>{
-     console.log(`Server is up and running on port ${PORT}`)
-});
+const sslServer = https.createServer({
+   key: fs.readFileSync(path.join(__dirname, 'certificate', 'key.pem')),
+   cert: fs.readFileSync(path.join(__dirname, 'certificate', 'cert.pem')),
+}, app)
+
+sslServer.listen(PORT , ()=>{console.log(`Server is up and running on port ${PORT}`)});
