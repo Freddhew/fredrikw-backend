@@ -5,19 +5,21 @@ const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken');
 const path = require('path')
 const https = require('https')
-const fs = require('fs')
+const fs = require('fs');
+const { homedir } = require("os");
 
 
 const app = express()
-process.env.PORT = 5500
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 80
+
+const sslPORT = 3443
 
 let headers
 let body
 
 app.use(function (req, res, next) {
    res.setHeader( 'Content-Security-Policy', "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'");
-   res.send('This is a SSL Server')
+   // res.send('This is a SSL Server')
    next();
 });
 
@@ -51,12 +53,12 @@ app.post('/authorize', ( req, res ) => {
       }); 
 
       console.log("Your token: " + token)
-      res.status(200).send(token)
+      res.send(path.join(__dirname, '/html/home.html'));
+      // res.status(200).send(token)
 
-      app.get('/', function( req, res ) { //Eget försök för att ge access till ny sida efter login 
-         console.log("Attempted to open the home page")
-         res.sendFile(path.join(__dirname, '/html/home.html'));
-       });
+      // app.get('/', function( req, res ) { //Eget försök för att ge access till ny sida efter login 
+      //    console.log("Attempted to open the home page")
+      //  });
 
   }else{
       console.log("Not authorized")
@@ -69,4 +71,5 @@ const sslServer = https.createServer({
    cert: fs.readFileSync(path.join(__dirname, 'certificate', 'cert.pem')),
 }, app)
 
-sslServer.listen(PORT , ()=>{console.log(`Server is up and running on port ${PORT}`)});
+app.listen(PORT , ()=>{console.log(`Server is up and running on port ${PORT}`)});
+sslServer.listen(sslPORT , ()=>{console.log(`Open SSL is up and running on port ${sslPORT}`)});
