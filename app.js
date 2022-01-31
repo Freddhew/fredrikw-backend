@@ -10,7 +10,7 @@ const { homedir } = require("os");
 
 
 const app = express()
-const PORT = process.env.PORT || 80
+const PORT = process.env.PORT || 5500
 
 const sslPORT = 3443
 
@@ -18,8 +18,8 @@ let headers
 let body
 
 app.use(function (req, res, next) {
-   res.setHeader( 'Content-Security-Policy', "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'");
-   // res.send('This is a SSL Server')
+   // res.setHeader( 'Content-Security-Policy', "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'");
+   res.send('<h1>This is a SSL Server</h1>')
    next();
 });
 
@@ -53,12 +53,7 @@ app.post('/authorize', ( req, res ) => {
       }); 
 
       console.log("Your token: " + token)
-      res.send(path.join(__dirname, '/html/home.html'));
-      // res.status(200).send(token)
-
-      // app.get('/', function( req, res ) { //Eget försök för att ge access till ny sida efter login 
-      //    console.log("Attempted to open the home page")
-      //  });
+      res.status(200).send(token)
 
   }else{
       console.log("Not authorized")
