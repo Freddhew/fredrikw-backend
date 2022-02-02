@@ -1,13 +1,13 @@
 const credentials = {secretUser:"user" , secretPassword:"password"}
-const cors = require("cors")
-const express = require("express")
-const bodyParser = require('body-parser')
+const cors = require('cors');
+const express = require('express');
+const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-const path = require('path')
-const https = require('https')
+const path = require('path');
+const https = require('https');
 const fs = require('fs');
-const { homedir } = require("os");
-
+const { homedir } = require('os');
+const auditLog = require('audit-log');
 
 const app = express()
 const PORT = process.env.PORT || 5500
@@ -17,11 +17,16 @@ const sslPORT = 3443
 let headers
 let body
 
-app.use(function (req, res, next) {
-   // res.setHeader( 'Content-Security-Policy', "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'");
-   res.send('<h1>This is a SSL Server</h1>')
-   next();
-});
+// app.use(function (req, res, next) {
+//    // res.setHeader( 'Content-Security-Policy', "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'");
+//    res.send('<h1>This is a SSL Server</h1>')
+//    next();
+// });
+
+let option = {
+   key: fs.readFileSync("certificate/key.pem"),
+   cert: fs.readFileSync("certificate/cert.pem")
+};
 
 app.use('/healthcheck', require('./routes/healthcheck.routes')); // CARE! routes/healthcheck var tidigare /healthcheck (only)
 app.use(express.urlencoded({ extended: true }));
@@ -46,6 +51,10 @@ app.post('/authorize', ( req, res ) => {
    if(user===credentials.secretUser && password===credentials.secretPassword){
       console.log("Successfully logged in!")
       console.log("Authorized")
+
+      auditLog.addTransport("console");
+      auditLog.logEvent( ` The user with the username: ${user} and password: ${password}`,"https://fredrikw-backend.herokuapp.com/authorize","logged in",)
+      
       const token = jwt.sign({
             data: 'foobar'
       }, 'your-secret-key-here', { 
